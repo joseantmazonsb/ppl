@@ -1,0 +1,47 @@
+﻿version: '3.1'
+services:
+  mysql:
+    image: mysql:8.0.27
+    container_name: mysql
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - 13306:3306
+    #volumes:
+    #  - ./mysql:/var/lib/mysql
+  mariadb:
+    image: mariadb:10.7.1
+    container_name: mariadb
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - 23306:3306
+    #volumes:
+    #  - ./mariadb:/var/lib/mysql
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04
+    container_name: sqlserver
+    restart: unless-stopped
+    ports:
+      - 11433:1433
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: 'yourStrong(!)Password'
+      MSSQL_PID: 'Express'
+    #volumes:
+    #  - ./mssql:/var/opt/mssql
+  postgresql: 
+    container_name: postgresql
+    image: postgres:14.1
+    restart: unless-stopped
+    ports:
+      - 15432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
