@@ -1,15 +1,17 @@
 ﻿using Core.Drivers;
-using Sql.Builders;
+using MySql;
+using Sql.Test;
 using Sql.Test.Models;
 
-namespace Sql.Test {
+namespace MariaDb.Test {
     public class MariaDbDriverShould : SqlDriverShould {
+
         private IDriver _driver;
+
         protected override IDriver Driver =>
-            _driver ??= new SqlDriverBuilder(Constants.MariaDbConnectionString)
+            _driver ??= new MySqlDriverBuilder(Constants.MariaDbConnectionString)
                 .WithSet<User>()
                 .WithSet<Booking>()
-                .WithOptions(new SqlDriverBuilderOptions(SqlProvider.MariaDb))
                 .Build();
     }
 }

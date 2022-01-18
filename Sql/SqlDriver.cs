@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Sql {
     public class SqlDriver : Driver {
     
-        private readonly DbContext _context;
+        private readonly SqlContext _context;
     
-        public SqlDriver(DbContext context) {
+        public SqlDriver(SqlContext context) {
             _context = context;
             _context.Database.EnsureCreated();
         }

@@ -1,17 +1,16 @@
 ﻿using Core.Drivers;
-using Sql.Builders;
+using Sql.Test;
 using Sql.Test.Models;
 
-namespace Sql.Test {
+namespace SqlServer.Test {
     public class SqlServerDriverShould : SqlDriverShould {
 
         private IDriver _driver;
 
         protected override IDriver Driver =>
-            _driver ??= new SqlDriverBuilder(Constants.MsSqlConnectionString)
+            _driver ??= new SqlServerDriverBuilder(Constants.MsSqlConnectionString)
                 .WithSet<User>()
                 .WithSet<Booking>()
-                .WithOptions(new SqlDriverBuilderOptions(SqlProvider.MsSqlServer))
                 .Build();
     }
 }
