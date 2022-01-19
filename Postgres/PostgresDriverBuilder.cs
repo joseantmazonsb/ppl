@@ -6,7 +6,7 @@ namespace Postgres {
         public PostgresDriverBuilder(string connectionString) : base(connectionString) {}
 
         protected override SqlContext CreateContext() {
-            return Utils.CreateDbContext<PostgresContext>(Sets);
+            return Utils.CreateDbContext<PostgresContext>(Datasets);
         }
     }
 }

@@ -1,17 +1,13 @@
-﻿using Core.Builders;
-using Core.Drivers;
+﻿using PluggablePersistenceLayer.Core.Builders;
+using PluggablePersistenceLayer.Core.Drivers;
 
 namespace MongoDb.Builders {
-    public class MongoDbDriverBuilder : IDriverBuilder {
+    public class MongoDbDriverBuilder : DriverBuilder {
         
-        private readonly string _connectionString;
+        public MongoDbDriverBuilder(string connectionString) : base(connectionString) { }
 
-        public MongoDbDriverBuilder(string connectionString) {
-            _connectionString = connectionString;
-        }
-        
-        public IDriver Build() {
-            return new MongoDbDriver(_connectionString);
+        protected override IDriver DoBuild() {
+            return new MongoDbDriver(ConnectionString, Datasets);
         }
     }
 }

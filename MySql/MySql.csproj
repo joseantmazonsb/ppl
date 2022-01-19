@@ -2,6 +2,20 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <AssemblyName>PluggablePersistenceLayer.MySql</AssemblyName>
+        <RootNamespace>PluggablePersistenceLayer.MySql</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>PluggablePersistenceLayer.MySql</PackageId>
+        <PackageVersion>0.1.0</PackageVersion>
+        <Title>PluggablePersistenceLayer.MySql</Title>
+        <Authors>José Antonio Mazón San Bartolomé</Authors>
+        <Description>The PluggablePersistenceLayer's driver for MySql and MariaDb databases.</Description>
+        <PackageProjectUrl>https://github.com/joseantmazonsb/ppl</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/joseantmazonsb/ppl/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/joseantmazonsb/ppl.git</RepositoryUrl>
+        <PackageTags>database, persistence, framework-agnostic, wrapper, mysql, mariadb, sql</PackageTags>
+        <Company>José Antonio Mazón San Bartolomé</Company>
+        <Product>PluggablePersistenceLayer.MySql</Product>
     </PropertyGroup>
 
     <ItemGroup>

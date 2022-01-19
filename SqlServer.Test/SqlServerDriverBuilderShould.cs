@@ -1,4 +1,5 @@
-﻿using Sql.Test;
+﻿using PluggablePersistenceLayer.SqlServer;
+using Sql.Test;
 using Sql.Test.Models;
 using Xunit;
 
@@ -8,8 +9,8 @@ namespace SqlServer.Test {
         [Fact]
         public void CreateMsSqlDriver() {
             new SqlServerDriverBuilder(Constants.MsSqlConnectionString)
-                .WithSet<User>()
-                .WithSet<Booking>()
+                .WithDataset<User>("users")
+                .WithDataset<Booking>()
                 .Build();
         }
     }

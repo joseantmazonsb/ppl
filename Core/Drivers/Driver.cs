@@ -1,87 +1,122 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Entities;
-using Core.Exceptions;
+using System.Linq.Expressions;
+using PluggablePersistenceLayer.Core.Builders;
 
-namespace Core.Drivers {
+namespace PluggablePersistenceLayer.Core.Drivers {
     public abstract class Driver : IDriver {
-        public IEnumerable<T> GetAll<T>(Func<T, bool> filter) where T : Entity {
-            return GetAll<T>().Where(filter);
-        }
-        public IEnumerable<T> GetAll<T>() where T : Entity {
-            return DoGetAll<T>();
-        }
-        protected abstract IEnumerable<T> DoGetAll<T>() where T : Entity;
+        public IEnumerable<Dataset> Datasets { get; }
+        public abstract bool SupportsTransactions { get; }
 
-        public T Get<T>(Guid id) where T : Entity {
-            return DoGet<T>(id);
+        protected Driver(IEnumerable<Dataset> datasets) {
+            Datasets = datasets;
         }
-        protected abstract T DoGet<T>(Guid id) where T : Entity;
+        
+        protected virtual void AssertSupportedType<T>() where T : Entity {
+            var type = typeof(T);
+            if (!Datasets.Select(s => s.Type).Contains(type)) {
+                throw new InvalidOperationException($"No dataset available for type '{type}'. " +
+                                                    $"Register the type using a {nameof(IDriverBuilder)}.");
+            }
+        }
+        
+        public IEnumerable<T> GetAll<T>(Expression<Func<T, bool>> filter) where T : Entity {
+            AssertSupportedType<T>();
+            return GetAll<T>().Where(filter.Compile());
+        }
+
+        public abstract IEnumerable<T> GetAll<T>() where T : Entity;
+        public abstract T Get<T>(Guid id) where T : Entity;
         
         public bool Exists<T>(T entity) where T : Entity {
             return GetAll<T>(e => e.Id == entity.Id).SingleOrDefault() != null;
         }
 
-        public bool Exists<T>(Func<T, bool> filter) where T : Entity {
+        public bool Exists<T>(Expression<Func<T, bool>> filter) where T : Entity {
             return GetAll(filter).Any();
         }
-        
+
+
         public T Insert<T>(T entity) where T : Entity {
-            if (Exists(entity)) throw new EntityAlreadyExistsError();
-            try {
-                return DoInsert(entity);
-            }
-            catch (Exception e) {
-                throw new EntityNotInsertedError(e);
-            }
+            AssertSupportedType<T>();
+            return DoInsert(entity);
         }
-        protected abstract T DoInsert<T>(T entity) where T : Entity;
-        
+
         public T Update<T>(T entity) where T : Entity {
-            if (!Exists(entity)) throw new EntityNotFoundError();
-            try {
-                return DoUpdate(entity);
-            }
-            catch (Exception e) {
-                throw new EntityNotUpdatedError(e);
-            }
+            AssertSupportedType<T>();
+            return DoUpdate(entity);
         }
+
+        protected abstract T DoInsert<T>(T entity) where T : Entity;
         protected abstract T DoUpdate<T>(T entity) where T : Entity;
         
-        public IEnumerable<T> Remove<T>(Func<T, bool> filter) where T : Entity {
+        public IEnumerable<T> Remove<T>(Expression<Func<T, bool>> filter) where T : Entity {
+            AssertSupportedType<T>();
             var removed = new List<T>();
             foreach (var entity in GetAll(filter)) {
                 try {
-                    DoRemove(entity);
+                    Remove(entity);
                     removed.Add(entity);
                 }
-                catch (EntityNotRemovedError) {
+                catch (Exception) {
                     // Ignore
                 }
             }
             return removed;
         }
+
         public IDriver Remove<T>(T entity) where T : Entity {
-            Remove<T>(entity.Id);
+            AssertSupportedType<T>();
+            DoRemove(entity);
             return this;
         }
+        protected abstract IDriver DoRemove<T>(T entity) where T : Entity;
         public T Remove<T>(Guid id) where T : Entity {
-            try {
-                return Remove<T>(e => e.Id == id).Single();
-            }
-            catch (Exception e) {
-                throw new EntityNotRemovedError(e);
-            }
+            return Remove<T>(e => e.Id == id).Single();
         }
 
         public void RemoveAll<T>() where T : Entity {
             Remove<T>(e => true);
         }
 
-        protected abstract T DoRemove<T>(T entity) where T : Entity;
+        public void SaveChanges() {
+            if (!SupportsTransactions) {
+                throw new NotSupportedException("This provider does not support transactions " +
+                                                "and so all operations are final");
+            }
+            Commit();
+        }
 
-        public abstract void SaveChanges();
-        public abstract void DiscardChanges();
+        public bool TrySaveChanges() {
+            try {
+                SaveChanges();
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
+        
+        public void DiscardChanges() {
+            if (!SupportsTransactions) {
+                throw new NotSupportedException("This provider does not support transactions " +
+                                                "and so all operations are final");
+            }
+            Rollback();
+        }
+        
+        public bool TryDiscardChanges() {
+            try {
+                DiscardChanges();
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
+        
+        protected abstract void Rollback();
+        protected abstract void Commit();
     }
 }

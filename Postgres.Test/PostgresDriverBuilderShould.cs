@@ -7,8 +7,8 @@ namespace Postgres.Test {
         [Fact]
         public void CreatePostgresDriver() {
             new PostgresDriverBuilder(Constants.PostgresConnectionString)
-                .WithSet<User>()
-                .WithSet<Booking>()
+                .WithDataset<User>()
+                .WithDataset<Booking>()
                 .Build();
         }
     }

@@ -1,31 +1,11 @@
-﻿version: '3'
+﻿version: '3.4'
+
 services:
-  rs01:
+  mongodb:
     image: mongo:5
-    hostname: rs01
-    container_name: rs01
-    ports:
-      - 27017:27017
-    environment:
-      ROLE: orchestrator
-      REPLICAS: "rs02 rs03"
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-  rs02:
-    image: mongo:5
-    hostname: rs02
-    container_name: rs02
-    ports:
-      - 27018:27017
+    container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-  rs03:
-    image: mongo:5
-    hostname: rs03
-    container_name: rs03
     ports:
-      - 27019:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      - "27017:27017"

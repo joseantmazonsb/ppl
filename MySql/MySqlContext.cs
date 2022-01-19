@@ -4,7 +4,8 @@ using Sql;
 namespace MySql {
     public class MySqlContext : SqlContext {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString))
+            optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString),
+                    o => o.EnableRetryOnFailure())
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors();
         }

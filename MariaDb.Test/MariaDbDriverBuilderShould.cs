@@ -8,8 +8,8 @@ namespace MariaDb.Test {
         [Fact]
         public void CreateMariaDbDriver() {
             new MySqlDriverBuilder(Constants.MariaDbConnectionString)
-                .WithSet<User>()
-                .WithSet<Booking>()
+                .WithDataset<User>()
+                .WithDataset<Booking>()
                 .Build();
         }
     }

@@ -8,8 +8,8 @@ namespace MySql.Test {
         [Fact]
         public void CreateMySqlDriver() {
             new MySqlDriverBuilder(Constants.MySqlConnectionString)
-                .WithSet<User>()
-                .WithSet<Booking>()
+                .WithDataset<User>()
+                .WithDataset<Booking>()
                 .Build();
         }
     }

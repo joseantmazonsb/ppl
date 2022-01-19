@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Drivers;
 using Microsoft.EntityFrameworkCore;
+using PluggablePersistenceLayer.Core;
+using PluggablePersistenceLayer.Core.Drivers;
 
 namespace Sql {
     public class SqlDriver : Driver {
     
         private readonly SqlContext _context;
     
-        public SqlDriver(SqlContext context) {
+        public SqlDriver(SqlContext context, IEnumerable<Dataset> datasets) : base(datasets) {
             _context = context;
             _context.Database.EnsureCreated();
         }
-        protected override IEnumerable<T> DoGetAll<T>() {
+
+        public override bool SupportsTransactions => true;
+
+        public override IEnumerable<T> GetAll<T>() {
             return _context.Set<T>();
         }
-        protected override T DoGet<T>(Guid id) {
+        public override T Get<T>(Guid id) {
             return _context.Find<T>(id);
         }
 
@@ -28,16 +32,17 @@ namespace Sql {
             return _context.Update(entity).Entity;
         }
 
-        protected override T DoRemove<T>(T entity) {
+        protected override IDriver DoRemove<T>(T entity) {
             _context.Attach(entity); // TODO needed?
-            return _context.Remove(entity).Entity;
+            _context.Remove(entity);
+            return this;
         }
         
-        public override void SaveChanges() {
+        protected override void Commit() {
             _context.SaveChanges();
         }
         
-        public override void DiscardChanges() {
+        protected override void Rollback() {
             foreach (var entry in _context.ChangeTracker.Entries().ToList()) {
                 switch (entry.State) {
                     case EntityState.Modified:

@@ -1,4 +1,4 @@
-﻿using Core.Drivers;
+﻿using PluggablePersistenceLayer.Core.Drivers;
 using Sql.Test;
 using Sql.Test.Models;
 
@@ -9,8 +9,8 @@ namespace Postgres.Test {
 
         protected override IDriver Driver =>
             _driver ??= new PostgresDriverBuilder(Constants.PostgresConnectionString)
-                .WithSet<User>()
-                .WithSet<Booking>()
+                .WithDataset<User>()
+                .WithDataset<Booking>()
                 .Build();
     }
 }

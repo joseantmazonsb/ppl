@@ -1,5 +1,5 @@
-﻿using Core.Drivers;
-using MySql;
+﻿using MySql;
+using PluggablePersistenceLayer.Core.Drivers;
 using Sql.Test;
 using Sql.Test.Models;
 
@@ -10,8 +10,8 @@ namespace MariaDb.Test {
 
         protected override IDriver Driver =>
             _driver ??= new MySqlDriverBuilder(Constants.MariaDbConnectionString)
-                .WithSet<User>()
-                .WithSet<Booking>()
+                .WithDataset<User>()
+                .WithDataset<Booking>()
                 .Build();
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
-using Core.Drivers;
 using FluentAssertions;
+using PluggablePersistenceLayer.Core.Drivers;
 using Sql.Test.Models;
 using Xunit;
 

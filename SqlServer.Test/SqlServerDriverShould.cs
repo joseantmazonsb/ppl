@@ -1,4 +1,5 @@
-﻿using Core.Drivers;
+﻿using PluggablePersistenceLayer.Core.Drivers;
+using PluggablePersistenceLayer.SqlServer;
 using Sql.Test;
 using Sql.Test.Models;
 
@@ -9,8 +10,8 @@ namespace SqlServer.Test {
 
         protected override IDriver Driver =>
             _driver ??= new SqlServerDriverBuilder(Constants.MsSqlConnectionString)
-                .WithSet<User>()
-                .WithSet<Booking>()
+                .WithDataset<User>()
+                .WithDataset<Booking>()
                 .Build();
     }
 }

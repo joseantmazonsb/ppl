@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Entities;
+using PluggablePersistenceLayer.Core;
 
 namespace Core.Test {
     public class TestEntity : Entity {

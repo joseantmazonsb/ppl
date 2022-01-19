@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sql;
+﻿using Sql;
 using Sql.Builders;
 
 namespace MySql {
@@ -7,7 +6,7 @@ namespace MySql {
         public MySqlDriverBuilder(string connectionString) : base(connectionString) {}
 
         protected override SqlContext CreateContext() {
-            return Utils.CreateDbContext<MySqlContext>(Sets);
+            return Utils.CreateDbContext<MySqlContext>(Datasets);
         }
     }
 }
