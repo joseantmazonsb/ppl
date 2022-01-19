@@ -7,7 +7,7 @@ PPL allows you to quickly set up the persistence layer of your choosing, as simp
 ```csharp
 using PluggablePersistenceLayer.SqlServer;
 ...
-var connectionString = "..."
+var connectionString = "...";
 var driver = new SqlServerDriverBuilder(connectionString)
                     .WithDataset<Artist>()
                     .WithDataset<Album>()
@@ -23,7 +23,7 @@ Well, the datasets you register would be the tables/collections stored in your d
 ```csharp
 using PluggablePersistenceLayer.SqlServer;
 ...
-var connectionString = "..."
+var connectionString = "...";
 var driver = new SqlServerDriverBuilder(connectionString)
                     .WithDataset<Artist>("artists")
                     .WithDataset<Album>()
@@ -91,7 +91,7 @@ As you would have imagined, PPL supports multiple database providers, such as My
 ```csharp
 using PluggablePersistenceLayer.MySql;
 ...
-var connectionString = "..."
+var connectionString = "...";
 var driver = new MySqlDriverBuilder(connectionString)
                     .WithDataset<Artist>()
                     .WithDataset<Album>()
@@ -103,7 +103,7 @@ var driver = new MySqlDriverBuilder(connectionString)
 ```csharp
 using PluggablePersistenceLayer.MongoDb;
 ...
-var connectionString = "..."
+var connectionString = "...";
 var driver = new MongoDbDriverBuilder(connectionString)
                     .WithDataset<Artist>()
                     .WithDataset<Album>()
