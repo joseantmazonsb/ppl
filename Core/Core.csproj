@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>PluggablePersistenceLayer.Core</PackageId>
         <PackageVersion>0.1.0</PackageVersion>
@@ -11,14 +10,16 @@
         <PackageProjectUrl>https://github.com/joseantmazonsb/ppl</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/joseantmazonsb/ppl/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/joseantmazonsb/ppl.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
         <PackageTags>database, persistence, framework-agnostic, wrapper</PackageTags>
         <Product>PluggablePersistenceLayer.Core</Product>
         <AssemblyName>PluggablePersistenceLayer.Core</AssemblyName>
         <RootNamespace>PluggablePersistenceLayer.Core</RootNamespace>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
     </ItemGroup>
 
 </Project>

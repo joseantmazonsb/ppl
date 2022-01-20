@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>PluggablePersistenceLayer.Sql</AssemblyName>
         <RootNamespace>PluggablePersistenceLayer.Sql</RootNamespace>
         <PackageId>PluggablePersistenceLayer.Sql</PackageId>
@@ -12,6 +12,7 @@
         <PackageProjectUrl>https://github.com/joseantmazonsb/ppl</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/joseantmazonsb/ppl/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/joseantmazonsb/ppl.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
         <PackageTags>database, persistence, framework-agnostic, wrapper, sql</PackageTags>
         <Company>José Antonio Mazón San Bartolomé</Company>
         <Product>PluggablePersistenceLayer.Sql</Product>
@@ -24,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>PluggablePersistenceLayer.SqlServer</PackageId>
         <PackageVersion>0.1.0</PackageVersion>
@@ -11,7 +11,7 @@
         <PackageProjectUrl>https://github.com/joseantmazonsb/ppl</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/joseantmazonsb/ppl/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/joseantmazonsb/ppl.git</RepositoryUrl>
-        <RepositoryType></RepositoryType>
+        <RepositoryType>git</RepositoryType>
         <Product>PluggablePersistenceLayer.SqlServer</Product>
         <AssemblyName>PluggablePersistenceLayer.SqlServer</AssemblyName>
         <RootNamespace>PluggablePersistenceLayer.SqlServer</RootNamespace>
@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
     </ItemGroup>
 
 </Project>
