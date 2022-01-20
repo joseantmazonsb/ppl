@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 
-namespace DynamicProxy.Extensions {
+namespace PluggablePersistenceLayer.DynamicProxy.Extensions {
     /// <summary>
     /// Contains extension methods which deal with Strings.
     /// </summary>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using DynamicProxy.Factories;
-using DynamicProxy.Models;
 using Microsoft.EntityFrameworkCore;
 using PluggablePersistenceLayer.Core;
+using PluggablePersistenceLayer.DynamicProxy.Factories;
+using PluggablePersistenceLayer.DynamicProxy.Models;
 
 namespace PluggablePersistenceLayer.Sql {
     public static class Utils {

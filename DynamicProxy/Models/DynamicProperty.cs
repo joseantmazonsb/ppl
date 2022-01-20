@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DynamicProxy.Models {
+namespace PluggablePersistenceLayer.DynamicProxy.Models {
 
     /// <summary>
     /// Represents the definition of a dynamic property which can be added to an object at runtime.

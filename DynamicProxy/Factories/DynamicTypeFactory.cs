@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Reflection.Emit;
-using DynamicProxy.Extensions;
-using DynamicProxy.Models;
+using PluggablePersistenceLayer.DynamicProxy.Extensions;
+using PluggablePersistenceLayer.DynamicProxy.Models;
 
-namespace DynamicProxy.Factories {
+namespace PluggablePersistenceLayer.DynamicProxy.Factories {
     /// <summary>
     /// Generates new Types with dynamically added properties.
     /// </summary>
