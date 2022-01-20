@@ -7,7 +7,6 @@ using PluggablePersistenceLayer.Core.Builders;
 namespace PluggablePersistenceLayer.Core.Drivers {
     public abstract class Driver : IDriver {
         public IEnumerable<Dataset> Datasets { get; }
-        public abstract bool SupportsTransactions { get; }
 
         protected Driver(IEnumerable<Dataset> datasets) {
             Datasets = datasets;
@@ -36,7 +35,6 @@ namespace PluggablePersistenceLayer.Core.Drivers {
         public bool Exists<T>(Expression<Func<T, bool>> filter) where T : Entity {
             return GetAll(filter).Any();
         }
-
 
         public T Insert<T>(T entity) where T : Entity {
             AssertSupportedType<T>();
@@ -80,43 +78,9 @@ namespace PluggablePersistenceLayer.Core.Drivers {
             Remove<T>(e => true);
         }
 
-        public void SaveChanges() {
-            if (!SupportsTransactions) {
-                throw new NotSupportedException("This provider does not support transactions " +
-                                                "and so all operations are final");
-            }
-            Commit();
-        }
-
-        public bool TrySaveChanges() {
-            try {
-                SaveChanges();
-                return true;
-            }
-            catch {
-                return false;
-            }
-        }
-        
-        public void DiscardChanges() {
-            if (!SupportsTransactions) {
-                throw new NotSupportedException("This provider does not support transactions " +
-                                                "and so all operations are final");
-            }
-            Rollback();
-        }
-        
-        public bool TryDiscardChanges() {
-            try {
-                DiscardChanges();
-                return true;
-            }
-            catch {
-                return false;
-            }
-        }
-        
-        protected abstract void Rollback();
-        protected abstract void Commit();
+        public abstract void SaveChanges();
+        public abstract void BeginTransaction();
+        public abstract void CommitTransaction();
+        public abstract void RollbackTransaction();
     }
 }

@@ -1,13 +1,19 @@
 ﻿using PluggablePersistenceLayer.Core.Builders;
 using PluggablePersistenceLayer.Core.Drivers;
 
-namespace MongoDb.Builders {
+namespace PluggablePersistenceLayer.MongoDb.Builders {
     public class MongoDbDriverBuilder : DriverBuilder {
-        
-        public MongoDbDriverBuilder(string connectionString) : base(connectionString) { }
+        private MongoDbDriverOptions _options;
+        public MongoDbDriverBuilder(string connectionString) : base(connectionString) {
+        }
 
-        protected override IDriver DoBuild() {
-            return new MongoDbDriver(ConnectionString, Datasets);
+        public override IDriver Build() {
+            return new MongoDbDriver(ConnectionString, Datasets, _options);
+        }
+
+        public IDriverBuilder WithOptions(MongoDbDriverOptions options) {
+            _options = options;
+            return this;
         }
     }
 }

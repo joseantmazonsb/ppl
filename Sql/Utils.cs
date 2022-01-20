@@ -5,7 +5,7 @@ using DynamicProxy.Models;
 using Microsoft.EntityFrameworkCore;
 using PluggablePersistenceLayer.Core;
 
-namespace Sql {
+namespace PluggablePersistenceLayer.Sql {
     public static class Utils {
         public static T CreateDbContext<T>(IEnumerable<Dataset> datasets) where T : DbContext {
             var properties = new List<DynamicProperty>();

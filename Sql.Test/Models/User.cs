@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using PluggablePersistenceLayer.Sql;
 
 namespace Sql.Test.Models {
     public class User : SqlEntity {

@@ -10,19 +10,12 @@ namespace Core.Test {
         
         protected abstract IDriver Driver { get; }
 
-        private void SaveChanges() {
-            if (!Driver.SupportsTransactions) {
-                return;
-            }
-            Driver.SaveChanges();
-        }
-        
         protected DriverShould() {
             Driver.Insert(new User {
                 Nickname = "dummy",
                 JoinDate = DateTime.Now,
             });
-            SaveChanges();
+            Driver.SaveChanges();
         }
         
         [Fact]
@@ -59,9 +52,9 @@ namespace Core.Test {
         public void DeleteOneUser() {
             var user = Driver.Insert(CreateTempUser());
             user.Id.Should().NotBeEmpty();
-            SaveChanges();
+            Driver.SaveChanges();
             Driver.Remove(user);
-            SaveChanges();
+            Driver.SaveChanges();
             Driver.Exists(user).Should().BeFalse();
         }
         
@@ -69,30 +62,34 @@ namespace Core.Test {
         public void UpdateOneUser() {
             var user = Driver.Insert(CreateTempUser());
             user.Id.Should().NotBeEmpty();
-            SaveChanges();
+            Driver.SaveChanges();
             user.Nickname = "temp2";
             var updatedUser = Driver.Update(user);
             updatedUser.Nickname.Should().Be(user.Nickname);
             Driver.Remove(updatedUser);
-            SaveChanges();
+            Driver.SaveChanges();
         }
         
         [Fact]
         public void DiscardAllChanges() {
-            if (!Driver.SupportsTransactions) {
+            try {
+                Driver.BeginTransaction();
+            }
+            catch {
                 return;
             }
             var user = Driver.Insert(CreateTempUser());
             user.Id.Should().NotBeEmpty();
-            Driver.DiscardChanges();
-            SaveChanges();
+            Driver.SaveChanges();
+            Driver.Exists(user).Should().BeTrue();
+            Driver.RollbackTransaction();
             Driver.Exists(user).Should().BeFalse();
         }
         
         public void Dispose() {
             Driver.RemoveAll<User>();
             Driver.RemoveAll<Booking>();
-            SaveChanges();
+            Driver.SaveChanges();
         }
     }
 }

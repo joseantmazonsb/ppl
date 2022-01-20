@@ -70,10 +70,12 @@ namespace Sql.Test {
         
         [Fact]
         public void DiscardChanges() {
+            Driver.BeginTransaction();
             var user = Driver.Insert(CreateTempUser());
             user.Id.Should().NotBeEmpty();
-            Driver.DiscardChanges();
             Driver.SaveChanges();
+            Driver.Exists(user).Should().BeTrue();
+            Driver.RollbackTransaction();
             Driver.Exists(user).Should().BeFalse();
         }
 

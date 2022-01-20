@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sql;
+using PluggablePersistenceLayer.Sql;
 
-namespace Postgres {
+namespace PluggablePersistenceLayer.Postgres {
     public class PostgresContext : SqlContext {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseNpgsql(ConnectionString, o => o.EnableRetryOnFailure())
+            optionsBuilder.UseNpgsql(ConnectionString, Options)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors();
         }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using PluggablePersistenceLayer.Core;
 
-namespace Sql {
+namespace PluggablePersistenceLayer.Sql {
     public abstract class SqlEntity : Entity {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

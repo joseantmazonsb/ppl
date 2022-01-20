@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sql;
+using PluggablePersistenceLayer.Sql;
 
-namespace MySql {
+namespace PluggablePersistenceLayer.MySql {
     public class MySqlContext : SqlContext {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString),
-                    o => o.EnableRetryOnFailure())
+            optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString), Options)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors();
         }

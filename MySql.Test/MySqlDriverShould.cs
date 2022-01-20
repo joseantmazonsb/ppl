@@ -1,4 +1,6 @@
-﻿using PluggablePersistenceLayer.Core.Drivers;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using PluggablePersistenceLayer.Core.Drivers;
+using PluggablePersistenceLayer.MySql;
 using Sql.Test;
 using Sql.Test.Models;
 
@@ -9,6 +11,7 @@ namespace MySql.Test {
 
         protected override IDriver Driver =>
             _driver ??= new MySqlDriverBuilder(Constants.MySqlConnectionString)
+                .WithOptions<MySqlDbContextOptionsBuilder>(o => o.EnableRetryOnFailure())
                 .WithDataset<User>()
                 .WithDataset<Booking>()
                 .Build();

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using PluggablePersistenceLayer.Core.Drivers;
 
 namespace PluggablePersistenceLayer.Core.Builders {
@@ -12,22 +10,7 @@ namespace PluggablePersistenceLayer.Core.Builders {
             ConnectionString = connectionString;
             Datasets = new HashSet<Dataset>();
         }
-        private void BeforeBuild() {
-            var errorTitle = $"Cannot build {nameof(IDriverBuilder)} instance:";
-            if (string.IsNullOrEmpty(ConnectionString)) {
-                throw new InvalidOperationException($"{errorTitle} the connection string cannot be null nor empty!");
-            }
-            if (!Datasets.Any()) {
-                throw new InvalidOperationException($"{errorTitle} there are no datasets! " +
-                                                    $"Use method '{nameof(WithDataset)}' to specify the datasets.");
-            }
-        }
-
-        public IDriver Build() {
-            BeforeBuild();
-            return DoBuild();
-        }
-        protected abstract IDriver DoBuild();
+        public abstract IDriver Build();
         public IDriverBuilder WithDataset<T>() where T : Entity {
             Datasets.Add(new Dataset(typeof(T)));
             return this;

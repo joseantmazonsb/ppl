@@ -23,4 +23,8 @@
       <ProjectReference Include="..\DynamicProxy\DynamicProxy.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.13" />
+    </ItemGroup>
+
 </Project>

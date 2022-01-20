@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using PluggablePersistenceLayer.Core;
 using PluggablePersistenceLayer.Core.Drivers;
 
-namespace Sql {
+namespace PluggablePersistenceLayer.Sql {
     public class SqlDriver : Driver {
     
         private readonly SqlContext _context;
@@ -14,8 +12,6 @@ namespace Sql {
             _context = context;
             _context.Database.EnsureCreated();
         }
-
-        public override bool SupportsTransactions => true;
 
         public override IEnumerable<T> GetAll<T>() {
             return _context.Set<T>();
@@ -37,24 +33,21 @@ namespace Sql {
             _context.Remove(entity);
             return this;
         }
-        
-        protected override void Commit() {
+
+        public override void SaveChanges() {
             _context.SaveChanges();
         }
-        
-        protected override void Rollback() {
-            foreach (var entry in _context.ChangeTracker.Entries().ToList()) {
-                switch (entry.State) {
-                    case EntityState.Modified:
-                    case EntityState.Deleted:
-                        entry.State = EntityState.Modified; // Revert changes made to deleted entity.
-                        entry.State = EntityState.Unchanged;
-                        break;
-                    case EntityState.Added:
-                        entry.State = EntityState.Detached;
-                        break;
-                }
-            }
+
+        public override void BeginTransaction() {
+            _context.Database.BeginTransaction();
+        }
+
+        public override void CommitTransaction() {
+            _context.Database.CommitTransaction();
+        }
+
+        public override void RollbackTransaction() {
+            _context.Database.RollbackTransaction();
         }
     }
 }

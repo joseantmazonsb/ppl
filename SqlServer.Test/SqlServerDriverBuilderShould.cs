@@ -1,4 +1,5 @@
-﻿using PluggablePersistenceLayer.SqlServer;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using PluggablePersistenceLayer.SqlServer;
 using Sql.Test;
 using Sql.Test.Models;
 using Xunit;
@@ -9,7 +10,8 @@ namespace SqlServer.Test {
         [Fact]
         public void CreateMsSqlDriver() {
             new SqlServerDriverBuilder(Constants.MsSqlConnectionString)
-                .WithDataset<User>("users")
+                .WithOptions<SqlServerDbContextOptionsBuilder>(o => o.EnableRetryOnFailure())
+                .WithDataset<User>()
                 .WithDataset<Booking>()
                 .Build();
         }

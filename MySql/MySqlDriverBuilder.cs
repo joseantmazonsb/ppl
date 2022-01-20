@@ -1,7 +1,10 @@
-﻿using Sql;
-using Sql.Builders;
+﻿using PluggablePersistenceLayer.Sql;
+using PluggablePersistenceLayer.Sql.Builders;
 
-namespace MySql {
+namespace PluggablePersistenceLayer.MySql {
+    /// <summary>
+    /// Wrapper to interact with MySql and MariaDb databases.
+    /// </summary>
     public class MySqlDriverBuilder : SqlDriverBuilder {
         public MySqlDriverBuilder(string connectionString) : base(connectionString) {}
 

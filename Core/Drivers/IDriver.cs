@@ -4,11 +4,10 @@ using System.Linq.Expressions;
 
 namespace PluggablePersistenceLayer.Core.Drivers {
     public interface IDriver {
-        IEnumerable<Dataset> Datasets { get; }
         /// <summary>
-        /// Whether the provider offers support for transactions or not.
+        /// Datasets managed by the driver.
         /// </summary>
-        bool SupportsTransactions { get; }
+        IEnumerable<Dataset> Datasets { get; }
         /// <summary>
         /// Retrieve all entities which match the given filter from the database. 
         /// </summary>
@@ -26,21 +25,17 @@ namespace PluggablePersistenceLayer.Core.Drivers {
         /// </summary>
         /// <returns></returns>
         IEnumerable<T> GetAll<T>()  where T : Entity;
-
         /// <summary>
         /// Insert an entity into the database.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>The inserted entity.</returns>
-        /// <exception>If the entity already exists.</exception>
         T Insert<T>(T entity)  where T : Entity;
-
         /// <summary>
         /// Update an already existent entity in the database.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>The updated user.</returns>
-        /// <exception>If the entity does not exist.</exception>
         T Update<T>(T entity)  where T : Entity;
         /// <summary>
         /// Check whether an entity exists in the database or not.
@@ -80,18 +75,19 @@ namespace PluggablePersistenceLayer.Core.Drivers {
         /// <summary>
         /// Save all changes made to the database.
         /// </summary>
+        /// <remarks>Will throw an exception if the driver does not support transactions.</remarks>
         void SaveChanges();
         /// <summary>
-        /// Try to save all changes made to the database.
+        /// Start a new transaction.
         /// </summary>
-        bool TrySaveChanges();
+        void BeginTransaction();
         /// <summary>
-        /// Discard all changes made to the database.
+        /// Commit a new transaction.
         /// </summary>
-        void DiscardChanges();
+        void CommitTransaction();
         /// <summary>
-        /// Try to discard all changes made to the database.
+        /// Rollback the current transaction.
         /// </summary>
-        bool TryDiscardChanges();
+        void RollbackTransaction();
     }
 }

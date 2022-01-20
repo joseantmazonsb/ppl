@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sql;
+using PluggablePersistenceLayer.Sql;
 
 namespace PluggablePersistenceLayer.SqlServer {
     public class SqlServerContext : SqlContext {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseSqlServer(ConnectionString, o => o.EnableRetryOnFailure())
+            optionsBuilder.UseSqlServer(ConnectionString, Options)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors();
         }

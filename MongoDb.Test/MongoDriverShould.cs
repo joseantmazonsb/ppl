@@ -1,7 +1,10 @@
-﻿using Core.Test;
+﻿using System;
+using Core.Test;
 using Core.Test.Models;
-using MongoDb.Builders;
+using FluentAssertions;
 using PluggablePersistenceLayer.Core.Drivers;
+using PluggablePersistenceLayer.MongoDb.Builders;
+using Xunit;
 
 namespace MongoDb.Test {
     public class MongoDriverShould : DriverShould {
@@ -9,5 +12,17 @@ namespace MongoDb.Test {
             .WithDataset<User>()
             .WithDataset<Booking>()
             .Build();
+
+        [Fact]
+        public void WorkIfNoDatasetSpecifiedAndAllowAnyDatasetIsTrue() {
+            var driver = new MongoDbDriverBuilder(Constants.ConnectionString)
+                .WithOptions(new MongoDbDriverOptions {
+                    Strict = false,
+                    AllowAnyDataset = true
+                })
+                .Build();
+            Action action = () => driver.GetAll<User>();
+            action.Should().NotThrow<InvalidOperationException>();
+        }
     }
 }

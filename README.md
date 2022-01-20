@@ -1,6 +1,6 @@
 # Pluggable Persistence Layer
 
->A simple yet handy framework-agnostic .NET persistence wrapper.
+>A handy framework-agnostic .NET persistence wrapper.
 
 PPL allows you to quickly set up the persistence layer of your choosing, as simple as this:
 
@@ -70,19 +70,24 @@ Action invalid = () => driver.GetAll<Songwriter>();
 invalid.Should().Throw<InvalidOperationException>(); // Class Songwriter has no registered dataset
 ```
 
-Yes, there are transactions involved (for those providers that support them), and of course you may revert the changes made to the database when something goes wrong:
+Yes, you can use transactions yourself (for those providers that support them) the same way you've been doing with **EntityFramework**:
 
 ```csharp
 ...
+driver.BeginTransaction();
 try {
     driver.Insert<Artist>(new Artist {
-        ...
+        Name = "martha"
     });
-    throw new InvalidOperationException("Oopsie");
+    ...
     driver.SaveChanges();
+    driver.CommitTransaction();
 }
 catch {
-    driver.DiscardChanges();
+    driver.RollbackTransaction();
+    driver.GetAll<Artist>(a => a.Name == "martha")
+        .Should()
+        .BeEmpty();
 }
 ```
 
@@ -112,4 +117,4 @@ var driver = new MongoDbDriverBuilder(connectionString)
                     .Build();
 ```
 
-Pretty straight-forward, isn't it?
+Pretty straight-forward, isn't it? There's more, but you got the idea.

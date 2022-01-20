@@ -1,7 +1,7 @@
 using System;
 using Core.Test.Models;
 using FluentAssertions;
-using MongoDb.Builders;
+using PluggablePersistenceLayer.MongoDb.Builders;
 using Xunit;
 
 namespace MongoDb.Test {
