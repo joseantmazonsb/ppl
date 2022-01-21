@@ -12,6 +12,6 @@ namespace SqlServer.Test {
             _driver ??= new SqlServerDriverBuilder(Constants.MsSqlConnectionString)
                 .WithDataset<User>()
                 .WithDataset<Booking>()
-                .Build();
+                .Build(true);
     }
 }

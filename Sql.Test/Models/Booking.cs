@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 using PluggablePersistenceLayer.Sql;
 
 namespace Sql.Test.Models {

@@ -12,6 +12,6 @@ namespace MariaDb.Test {
             _driver ??= new MySqlDriverBuilder(Constants.MariaDbConnectionString)
                 .WithDataset<User>()
                 .WithDataset<Booking>()
-                .Build();
+                .Build(true);
     }
 }

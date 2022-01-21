@@ -6,6 +6,8 @@ using PluggablePersistenceLayer.Core.Builders;
 
 namespace PluggablePersistenceLayer.Core.Drivers {
     public abstract class Driver : IDriver {
+        public abstract void EnsureDatabaseCreated();
+        public abstract void EnsureDatabaseDeleted();
         public IEnumerable<Dataset> Datasets { get; }
         protected string ConnectionString { get; }
 

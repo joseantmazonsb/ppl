@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using PluggablePersistenceLayer.Core;
 using PluggablePersistenceLayer.Core.Drivers;
@@ -9,23 +10,37 @@ namespace PluggablePersistenceLayer.Sql {
     
         private SqlContext _context;
         private readonly Action<IRelationalDbContextOptionsBuilderInfrastructure> _options;
+        private readonly Action<ModelBuilder> _onModelCreating;
 
-        private SqlContext Context => _context ??= InitializeContext();
+        /// <summary>
+        /// Expose the inner <c>DbContext</c>.
+        /// </summary>
+        public DbContext Context => _context ??= InitializeContext();
 
         private SqlContext InitializeContext() {
             var ctx = CreateContext();
-            ctx.Options = _options;
             ctx.ConnectionString = ConnectionString;
-            ctx.Database.EnsureCreated();
+            ctx.Options = _options;
+            ctx.ModelCreatingAction = _onModelCreating;
             return ctx;
         }
         protected abstract SqlContext CreateContext();
 
         protected SqlDriver(string connectionString, IEnumerable<Dataset> datasets, 
-            Action<IRelationalDbContextOptionsBuilderInfrastructure> options) : base(connectionString, datasets) {
+            Action<IRelationalDbContextOptionsBuilderInfrastructure> options, Action<ModelBuilder> onModelCreating) 
+            : base(connectionString, datasets) {
             _options = options;
+            _onModelCreating = onModelCreating;
         }
 
+        public override void EnsureDatabaseCreated() {
+            Context.Database.EnsureCreated();
+        }
+
+        public override void EnsureDatabaseDeleted() {
+            Context.Database.EnsureDeleted();
+        }
+        
         public override IEnumerable<T> GetAll<T>() {
             return Context.Set<T>();
         }

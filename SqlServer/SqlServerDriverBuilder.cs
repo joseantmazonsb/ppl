@@ -9,8 +9,8 @@ namespace PluggablePersistenceLayer.SqlServer {
         public SqlServerDriverBuilder(string connectionString) : base(connectionString) {
         }
 
-        public override IDriver Build() {
-            return new SqlServerDriver(ConnectionString, Datasets, Options);
+        protected override IDriver Build() {
+            return new SqlServerDriver(ConnectionString, Datasets, Options, OnModelCreating);
         }
     }
 }

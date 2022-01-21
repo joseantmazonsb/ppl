@@ -7,10 +7,19 @@ namespace PluggablePersistenceLayer.MongoDb.Builders {
         public MongoDbDriverBuilder(string connectionString) : base(connectionString) {
         }
 
-        public override IDriver Build() {
-            return new MongoDbDriver(ConnectionString, Datasets, _options);
+        public override IDriver Build(bool withDatabaseCreated = true) {
+            var driver = new MongoDbDriver(ConnectionString, Datasets, _options);
+            if (withDatabaseCreated) {
+                driver.EnsureDatabaseCreated();
+            }
+            return driver;
         }
 
+        /// <summary>
+        /// Allows specific MongoDb configuration to be set. 
+        /// </summary>
+        /// <param name="options">MongoDb settings.</param>
+        /// <returns>This builder</returns>
         public IDriverBuilder WithOptions(MongoDbDriverOptions options) {
             _options = options;
             return this;

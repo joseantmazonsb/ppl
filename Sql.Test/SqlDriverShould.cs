@@ -34,7 +34,7 @@ namespace Sql.Test {
                 .Should().NotBeNull();
         }
         
-        private static User CreateTempUser() {
+        protected static User CreateTempUser() {
             return new User {
                 Nickname = "temp",
             };

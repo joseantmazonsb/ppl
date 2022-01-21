@@ -10,7 +10,9 @@ namespace PluggablePersistenceLayer.Core.Builders {
             ConnectionString = connectionString;
             Datasets = new HashSet<Dataset>();
         }
-        public abstract IDriver Build();
+
+        public abstract IDriver Build(bool withDatabaseCreated = false);
+
         public IDriverBuilder WithDataset<T>() where T : Entity {
             Datasets.Add(new Dataset(typeof(T)));
             return this;

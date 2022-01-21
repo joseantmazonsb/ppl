@@ -9,5 +9,11 @@ namespace PluggablePersistenceLayer.Sql {
     public abstract class SqlContext : DbContext {
         public string ConnectionString { get; set; } = string.Empty;
         public Action<IRelationalDbContextOptionsBuilderInfrastructure> Options;
+        public Action<ModelBuilder> ModelCreatingAction;
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
+            ModelCreatingAction?.Invoke(modelBuilder);
+        }
     }
 }

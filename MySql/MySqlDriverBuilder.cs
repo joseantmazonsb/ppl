@@ -8,8 +8,8 @@ namespace PluggablePersistenceLayer.MySql {
     public class MySqlDriverBuilder : SqlDriverBuilder {
         public MySqlDriverBuilder(string connectionString) : base(connectionString) {}
 
-        public override IDriver Build() {
-            return new MySqlDriver(ConnectionString, Datasets, Options);
+        protected override IDriver Build() {
+            return new MySqlDriver(ConnectionString, Datasets, Options, OnModelCreating);
         }
     }
 }

@@ -7,8 +7,9 @@ namespace PluggablePersistenceLayer.Postgres {
     /// </summary>
     public class PostgresDriverBuilder : SqlDriverBuilder {
         public PostgresDriverBuilder(string connectionString) : base(connectionString) {}
-        public override IDriver Build() {
-            return new PostgresDriver(ConnectionString, Datasets, Options);
+
+        protected override IDriver Build() {
+            return new PostgresDriver(ConnectionString, Datasets, Options, OnModelCreating);
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Linq.Expressions;
 
 namespace PluggablePersistenceLayer.Core.Drivers {
     public interface IDriver {
+        void EnsureDatabaseCreated();
+        void EnsureDatabaseDeleted();
         /// <summary>
         /// Datasets managed by the driver.
         /// </summary>

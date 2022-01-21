@@ -15,18 +15,18 @@ namespace PluggablePersistenceLayer.MongoDb {
     /// Wrapper to interact with MongoDb databases.
     /// </summary>
     public class MongoDbDriver : Driver {
-        private readonly IMongoDatabase _database;
+        private IMongoDatabase _database;
         private IClientSession _session;
         private IClientSession Session => _session ??= _client.StartSession();
         private readonly MongoDbDriverOptions _options;
         private readonly MongoClient _client;
+        private readonly MongoUrl _url;
 
         public MongoDbDriver(string connectionString, IEnumerable<Dataset> datasets, 
             MongoDbDriverOptions options) : base(connectionString, datasets) {
             _options = options ?? new MongoDbDriverOptions();
-            var url = new MongoUrl(connectionString);
-            _client = new MongoClient(url);
-            _database = _client.GetDatabase(url.DatabaseName);
+            _url = new MongoUrl(connectionString);
+            _client = new MongoClient(_url);
             if (BsonSerializer.LookupSerializer<GuidSerializer>() != null) return;
             BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
         }
@@ -42,7 +42,19 @@ namespace PluggablePersistenceLayer.MongoDb {
         }
         
         private IMongoCollection<T> GetCollection<T>() {
+            if (_database == default) {
+                EnsureDatabaseCreated();
+            }
             return _database.GetCollection<T>(typeof(T).Name);
+        }
+
+        public override void EnsureDatabaseCreated() {
+            _database = _client.GetDatabase(_url.DatabaseName);
+        }
+
+        public override void EnsureDatabaseDeleted() {
+            _client.DropDatabase(_url.DatabaseName);
+            _database = default;
         }
 
         public override T Get<T>(Guid id) {

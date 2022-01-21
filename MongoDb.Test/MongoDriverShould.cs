@@ -11,7 +11,7 @@ namespace MongoDb.Test {
         protected override IDriver Driver { get; } = new MongoDbDriverBuilder(Constants.ConnectionString)
             .WithDataset<User>()
             .WithDataset<Booking>()
-            .Build();
+            .Build(true);
 
         [Fact]
         public void WorkIfNoDatasetSpecifiedAndAllowAnyDatasetIsTrue() {

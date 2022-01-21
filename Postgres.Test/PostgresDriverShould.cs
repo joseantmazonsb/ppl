@@ -12,6 +12,6 @@ namespace Postgres.Test {
             _driver ??= new PostgresDriverBuilder(Constants.PostgresConnectionString)
                 .WithDataset<User>()
                 .WithDataset<Booking>()
-                .Build();
+                .Build(true);
     }
 }
