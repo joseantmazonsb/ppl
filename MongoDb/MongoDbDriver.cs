@@ -16,15 +16,17 @@ namespace PluggablePersistenceLayer.MongoDb {
     /// </summary>
     public class MongoDbDriver : Driver {
         private readonly IMongoDatabase _database;
-        private readonly IClientSession _session;
+        private IClientSession _session;
+        private IClientSession Session => _session ??= _client.StartSession();
         private readonly MongoDbDriverOptions _options;
+        private readonly MongoClient _client;
+
         public MongoDbDriver(string connectionString, IEnumerable<Dataset> datasets, 
-            MongoDbDriverOptions options) : base(datasets) {
+            MongoDbDriverOptions options) : base(connectionString, datasets) {
             _options = options ?? new MongoDbDriverOptions();
             var url = new MongoUrl(connectionString);
-            var client = new MongoClient(url);
-            _database = client.GetDatabase(url.DatabaseName);
-            _session = client.StartSession();
+            _client = new MongoClient(url);
+            _database = _client.GetDatabase(url.DatabaseName);
             if (BsonSerializer.LookupSerializer<GuidSerializer>() != null) return;
             BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
         }
@@ -77,7 +79,7 @@ namespace PluggablePersistenceLayer.MongoDb {
 
         public override void BeginTransaction() {
             try {
-                _session.StartTransaction();
+                Session.StartTransaction();
             }
             catch (NotSupportedException) {
                 if (_options.FailIfTransactionsNotSupported) throw;
@@ -86,7 +88,10 @@ namespace PluggablePersistenceLayer.MongoDb {
 
         public override void CommitTransaction() {
             try {
-                _session.CommitTransaction();
+                using (Session) {
+                    Session.CommitTransaction();
+                }
+                _session = default;
             }
             catch (NotSupportedException) {
                 if (_options.FailIfTransactionsNotSupported) throw;
@@ -95,7 +100,10 @@ namespace PluggablePersistenceLayer.MongoDb {
 
         public override void RollbackTransaction() {
             try {
-                _session.AbortTransaction();
+                using (Session) {
+                    Session.AbortTransaction();
+                }
+                _session = default;
             }
             catch (NotSupportedException) {
                 if (_options.FailIfTransactionsNotSupported) throw;

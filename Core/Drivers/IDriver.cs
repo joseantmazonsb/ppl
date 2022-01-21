@@ -82,11 +82,11 @@ namespace PluggablePersistenceLayer.Core.Drivers {
         /// </summary>
         void BeginTransaction();
         /// <summary>
-        /// Commit a new transaction.
+        /// Commit and dispose the current transaction.
         /// </summary>
         void CommitTransaction();
         /// <summary>
-        /// Rollback the current transaction.
+        /// Rollback and dispose the current transaction.
         /// </summary>
         void RollbackTransaction();
     }

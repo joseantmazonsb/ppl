@@ -7,8 +7,10 @@ using PluggablePersistenceLayer.Core.Builders;
 namespace PluggablePersistenceLayer.Core.Drivers {
     public abstract class Driver : IDriver {
         public IEnumerable<Dataset> Datasets { get; }
+        protected string ConnectionString { get; }
 
-        protected Driver(IEnumerable<Dataset> datasets) {
+        protected Driver(string connectionString, IEnumerable<Dataset> datasets) {
+            ConnectionString = connectionString;
             Datasets = datasets;
         }
         

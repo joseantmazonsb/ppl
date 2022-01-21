@@ -13,7 +13,6 @@ namespace Sql.Test {
         protected SqlDriverShould() {
             Driver.Insert(new User {
                 Nickname = "dummy",
-                JoinDate = DateTime.Now,
             });
             Driver.SaveChanges();
         }
@@ -37,8 +36,13 @@ namespace Sql.Test {
         
         private static User CreateTempUser() {
             return new User {
-                JoinDate = DateTime.Now,
-                Nickname = "temp"
+                Nickname = "temp",
+            };
+        }
+        
+        private static User CreateInvalidUser() {
+            return new User {
+                Nickname = "ahdsasdhaidajjasjdahfjhakfh",
             };
         }
         
@@ -69,14 +73,24 @@ namespace Sql.Test {
         }
         
         [Fact]
-        public void DiscardChanges() {
+        public void WorkWithTransactions() {
             Driver.BeginTransaction();
-            var user = Driver.Insert(CreateTempUser());
+            var user = Driver.Insert(CreateInvalidUser());
             user.Id.Should().NotBeEmpty();
-            Driver.SaveChanges();
-            Driver.Exists(user).Should().BeTrue();
-            Driver.RollbackTransaction();
+            var a = () => {
+                Driver.SaveChanges();
+                Driver.CommitTransaction();
+            };
+            a.Should().Throw<Exception>();
             Driver.Exists(user).Should().BeFalse();
+            Driver.RollbackTransaction();
+            
+            Driver.BeginTransaction();
+            user = CreateTempUser();
+            Driver.Insert(user);
+            Driver.SaveChanges();
+            Driver.CommitTransaction();
+            Driver.Exists(user).Should().BeTrue();
         }
 
         public void Dispose() {

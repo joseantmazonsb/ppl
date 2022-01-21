@@ -1,7 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using PluggablePersistenceLayer.Core.Builders;
-using PluggablePersistenceLayer.Core.Drivers;
 
 namespace PluggablePersistenceLayer.Sql.Builders {
     public abstract class SqlDriverBuilder : DriverBuilder {
@@ -21,13 +20,5 @@ namespace PluggablePersistenceLayer.Sql.Builders {
             Options = o => options((T) o);
             return this;
         }
-
-        public override IDriver Build() {
-            var context = CreateContext();
-            context.ConnectionString = ConnectionString;
-            return new SqlDriver(context, Datasets);
-        }
-
-        protected abstract SqlContext CreateContext();
     }
 }

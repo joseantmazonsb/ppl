@@ -1,4 +1,4 @@
-﻿using PluggablePersistenceLayer.Sql;
+﻿using PluggablePersistenceLayer.Core.Drivers;
 using PluggablePersistenceLayer.Sql.Builders;
 
 namespace PluggablePersistenceLayer.SqlServer {
@@ -9,10 +9,8 @@ namespace PluggablePersistenceLayer.SqlServer {
         public SqlServerDriverBuilder(string connectionString) : base(connectionString) {
         }
 
-        protected override SqlContext CreateContext() {
-            var ctx = Utils.CreateDbContext<SqlServerContext>(Datasets);
-            ctx.Options = Options;
-            return ctx;
+        public override IDriver Build() {
+            return new SqlServerDriver(ConnectionString, Datasets, Options);
         }
     }
 }

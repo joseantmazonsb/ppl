@@ -1,53 +1,72 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using PluggablePersistenceLayer.Core;
 using PluggablePersistenceLayer.Core.Drivers;
 
 namespace PluggablePersistenceLayer.Sql {
-    public class SqlDriver : Driver {
+    public abstract class SqlDriver : Driver {
     
-        private readonly SqlContext _context;
-    
-        public SqlDriver(SqlContext context, IEnumerable<Dataset> datasets) : base(datasets) {
-            _context = context;
-            _context.Database.EnsureCreated();
+        private SqlContext _context;
+        private readonly Action<IRelationalDbContextOptionsBuilderInfrastructure> _options;
+
+        private SqlContext Context => _context ??= InitializeContext();
+
+        private SqlContext InitializeContext() {
+            var ctx = CreateContext();
+            ctx.Options = _options;
+            ctx.ConnectionString = ConnectionString;
+            ctx.Database.EnsureCreated();
+            return ctx;
+        }
+        protected abstract SqlContext CreateContext();
+
+        protected SqlDriver(string connectionString, IEnumerable<Dataset> datasets, 
+            Action<IRelationalDbContextOptionsBuilderInfrastructure> options) : base(connectionString, datasets) {
+            _options = options;
         }
 
         public override IEnumerable<T> GetAll<T>() {
-            return _context.Set<T>();
+            return Context.Set<T>();
         }
         public override T Get<T>(Guid id) {
-            return _context.Find<T>(id);
+            return Context.Find<T>(id);
         }
 
         protected override T DoInsert<T>(T entity) {
-            return _context.Add(entity).Entity;
+            return Context.Add(entity).Entity;
         }
 
         protected override T DoUpdate<T>(T entity) {
-            return _context.Update(entity).Entity;
+            return Context.Update(entity).Entity;
         }
 
         protected override IDriver DoRemove<T>(T entity) {
-            _context.Attach(entity); // TODO needed?
-            _context.Remove(entity);
+            Context.Attach(entity); // TODO needed?
+            Context.Remove(entity);
             return this;
         }
 
         public override void SaveChanges() {
-            _context.SaveChanges();
+            Context.SaveChanges();
         }
 
         public override void BeginTransaction() {
-            _context.Database.BeginTransaction();
+            Context.Database.BeginTransaction();
         }
 
         public override void CommitTransaction() {
-            _context.Database.CommitTransaction();
+            using (Context) {
+                Context.Database.CommitTransaction();
+            }
+            _context = default;
         }
 
         public override void RollbackTransaction() {
-            _context.Database.RollbackTransaction();
+            using (Context) {
+                Context.Database.RollbackTransaction();
+            }
+            _context = default;
         }
     }
 }

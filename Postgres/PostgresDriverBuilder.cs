@@ -1,4 +1,4 @@
-﻿using PluggablePersistenceLayer.Sql;
+﻿using PluggablePersistenceLayer.Core.Drivers;
 using PluggablePersistenceLayer.Sql.Builders;
 
 namespace PluggablePersistenceLayer.Postgres {
@@ -7,9 +7,8 @@ namespace PluggablePersistenceLayer.Postgres {
     /// </summary>
     public class PostgresDriverBuilder : SqlDriverBuilder {
         public PostgresDriverBuilder(string connectionString) : base(connectionString) {}
-
-        protected override SqlContext CreateContext() {
-            return Utils.CreateDbContext<PostgresContext>(Datasets);
+        public override IDriver Build() {
+            return new PostgresDriver(ConnectionString, Datasets, Options);
         }
     }
 }

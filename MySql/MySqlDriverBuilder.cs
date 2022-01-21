@@ -1,4 +1,4 @@
-﻿using PluggablePersistenceLayer.Sql;
+﻿using PluggablePersistenceLayer.Core.Drivers;
 using PluggablePersistenceLayer.Sql.Builders;
 
 namespace PluggablePersistenceLayer.MySql {
@@ -8,8 +8,8 @@ namespace PluggablePersistenceLayer.MySql {
     public class MySqlDriverBuilder : SqlDriverBuilder {
         public MySqlDriverBuilder(string connectionString) : base(connectionString) {}
 
-        protected override SqlContext CreateContext() {
-            return Utils.CreateDbContext<MySqlContext>(Datasets);
+        public override IDriver Build() {
+            return new MySqlDriver(ConnectionString, Datasets, Options);
         }
     }
 }
