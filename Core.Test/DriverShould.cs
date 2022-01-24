@@ -11,6 +11,7 @@ namespace Core.Test {
         protected abstract IDriver Driver { get; }
 
         protected DriverShould() {
+            Driver.EnsureDatabaseCreated();
             Driver.Insert(new User {
                 Nickname = "dummy",
                 JoinDate = DateTime.Now,
@@ -87,9 +88,7 @@ namespace Core.Test {
         }
         
         public void Dispose() {
-            Driver.RemoveAll<User>();
-            Driver.RemoveAll<Booking>();
-            Driver.SaveChanges();
+            Driver.EnsureDatabaseDeleted();
         }
     }
 }

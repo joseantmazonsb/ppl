@@ -4,7 +4,13 @@ using System.Linq.Expressions;
 
 namespace PluggablePersistenceLayer.Core.Drivers {
     public interface IDriver {
+        /// <summary>
+        /// Create the database if it does not already exists.
+        /// </summary>
         void EnsureDatabaseCreated();
+        /// <summary>
+        /// Delete the database if it exists.
+        /// </summary>
         void EnsureDatabaseDeleted();
         /// <summary>
         /// Datasets managed by the driver.
@@ -21,7 +27,7 @@ namespace PluggablePersistenceLayer.Core.Drivers {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public T Get<T>(Guid id)  where T : Entity;
+        T Get<T>(Guid id)  where T : Entity;
         /// <summary>
         /// Retrieve all entities from the database.
         /// </summary>
@@ -77,7 +83,6 @@ namespace PluggablePersistenceLayer.Core.Drivers {
         /// <summary>
         /// Save all changes made to the database.
         /// </summary>
-        /// <remarks>Will throw an exception if the driver does not support transactions.</remarks>
         void SaveChanges();
         /// <summary>
         /// Start a new transaction.

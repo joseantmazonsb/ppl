@@ -13,7 +13,7 @@ var driver = new SqlServerDriverBuilder(connectionString)
                     .WithDataset<Album>()
                     .WithDataset<Song>()
                     .WithDataset<Playlist>()
-                    .Build();
+                    .Build(withDatabaseCreated: true);
 ```
 
 But, **what are those datasets**?
@@ -29,12 +29,17 @@ var driver = new SqlServerDriverBuilder(connectionString)
                     .WithDataset<Album>()
                     .WithDataset<Song>()
                     .WithDataset<Playlist>()
-                    .Build();
+                    .Build(withDatabaseCreated: true);
 ```
-And then the driver will understand that there's a collection named `artists` that contains entities of type `Artist` in your database. 
+Then, the driver will understand that there's a collection named `artists` that contains entities of type `Artist` in your database. Note that we're setting the argument `withDatabaseCreated` to `true`. This will ensure the database is created. By default, the drivers will not create the database if it does not exist, but they implement two methods to create and delete databases:
 
+```csharp
+driver.EnsureDatabaseCreated();
+...
+driver.EnsureDatabaseDeleted();
+```
 
-Speaking of the devil, you would interact with the persistence layer through the driver using a good old CRUD:
+Of course, you would interact with the persistence layer using a good old CRUD:
 
 ```csharp
 ...
@@ -70,7 +75,7 @@ Action invalid = () => driver.GetAll<Songwriter>();
 invalid.Should().Throw<InvalidOperationException>(); // Class Songwriter has no registered dataset
 ```
 
-Yes, you can use transactions yourself (for those providers that support them) the same way you've been doing with **EntityFramework**:
+And yes, you can also use transactions yourself (for those providers that support them) the same way you've been doing with **EntityFramework**:
 
 ```csharp
 ...

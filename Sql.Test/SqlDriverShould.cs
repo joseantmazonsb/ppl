@@ -11,6 +11,7 @@ namespace Sql.Test {
         protected abstract IDriver Driver { get; }
 
         protected SqlDriverShould() {
+            Driver.EnsureDatabaseCreated();
             Driver.Insert(new User {
                 Nickname = "dummy",
             });
@@ -94,9 +95,7 @@ namespace Sql.Test {
         }
 
         public void Dispose() {
-            Driver.RemoveAll<User>();
-            Driver.RemoveAll<Booking>();
-            Driver.SaveChanges();
+            Driver.EnsureDatabaseDeleted();
         }
     }
 }
