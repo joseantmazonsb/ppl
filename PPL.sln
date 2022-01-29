@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDb.Test", "MongoDb.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Test", "Core.Test\Core.Test.csproj", "{3853D80B-B0FC-456A-9BC7-2933C278DC97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sqlite", "Sqlite\Sqlite.csproj", "{2225F7EE-9AB3-4E88-94F5-F10CE93DE785}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,5 +92,9 @@ Global
 		{3853D80B-B0FC-456A-9BC7-2933C278DC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3853D80B-B0FC-456A-9BC7-2933C278DC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3853D80B-B0FC-456A-9BC7-2933C278DC97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2225F7EE-9AB3-4E88-94F5-F10CE93DE785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2225F7EE-9AB3-4E88-94F5-F10CE93DE785}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2225F7EE-9AB3-4E88-94F5-F10CE93DE785}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2225F7EE-9AB3-4E88-94F5-F10CE93DE785}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
